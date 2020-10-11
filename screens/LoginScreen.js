@@ -12,6 +12,8 @@ export const LoginScreen = ({ navigation }) => {
   const firestoreData = useFirestoreContext();
   const [status, setStatus] = useState(true);
   const [token, setToken] = useState('');
+  const [partnerKey, setPartnerKey] = useState('');
+  const [myKey, setMyKey] = useState('');
   function onSubmitToken() {
     let flag = false;
     setStatus('Подключение...');
@@ -23,16 +25,15 @@ export const LoginScreen = ({ navigation }) => {
           }
         });
         if (flag) {
-          setToken('');
+          navigation.navigate('Home', { collection: firestoreData.doc(token), myKey, partnerKey });
           setStatus('');
-          navigation.navigate('Home', { collection: firestoreData.doc(token) });
         } else {
           setStatus('Ошибка');
         }
       })
-      .catch((err) => {
-        setStatus('Ошибка подключения к базе данных.');
-      })
+      .catch(() => {
+        setStatus('Ошибка');
+      });
   }
   return (
     <View style={styles.container}>
@@ -44,11 +45,23 @@ export const LoginScreen = ({ navigation }) => {
         source={MainHeartIcon}
         style={styles.imageLogo}
       />
-      <Text style={styles.title}>Введите ключ своей половинки:</Text>
+      <Text style={styles.title}>Введите общий ключ:</Text>
       <TextInput
         style={styles.input}
         onChangeText={(text) => setToken(text)}
         value={token}
+      />
+      <Text style={styles.title}>Введите ключ своей половинки:</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={(text) => setPartnerKey(text)}
+        value={partnerKey}
+      />
+      <Text style={styles.title}>Введите ваш ключ:</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={(text) => setMyKey(text)}
+        value={myKey}
       />
       <Text style={styles.status}>
         {status}
@@ -82,7 +95,7 @@ const styles = StyleSheet.create({
     height: 50,
   },
   title: {
-    marginTop: 50,
+    marginTop: 15,
     color: '#FF887C',
 
     fontFamily: 'Roboto',
