@@ -23,7 +23,8 @@
       "favicon": "./assets/favicon.png"
     },
     "android": {
-      "package": "host.exp.exponent"
+      "package": "com.counter.counter",
+      "versionCode": 1
     }
   }
 }
